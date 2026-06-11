@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript Components Gallery</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #111827;
+            color: white;
+            border-right: 1px solid #374151;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #374151;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .menu a:hover {
+            background: #1f2937;
+        }
+
+        .menu a.active {
+            background: #2563eb;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            height: 56px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 16px;
+            background: white;
+        }
+
+        .toolbar button {
+            padding: 8px 16px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            background: white;
+        }
+
+        .toolbar button.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .workspace {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .preview-panel,
+        .code-panel {
+            height: 100%;
+        }
+
+        .preview-panel {
+            flex: 1;
+        }
+
+        .code-panel {
+            flex: 1;
+            display: none;
+            overflow: auto;
+            background: #111827;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            color: #e5e7eb;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+
+        <div class="logo">
+            JS Components
+        </div>
+
+        <nav class="menu" id="menu"></nav>
+
+
+    </aside>
+
+    <main class="content">
+
+
+        <div class="toolbar">
+
+            <button id="previewBtn" class="active">
+                Preview
+            </button>
+
+            <button id="codeBtn">
+                Source Code
+            </button>
+
+            <button id="splitBtn">
+                Split View
+            </button>
+
+        </div>
+
+        <div class="workspace">
+
+            <div class="preview-panel" id="previewPanel">
+
+                <iframe id="viewer">
+                </iframe>
+
+            </div>
+
+            <div class="code-panel" id="codePanel">
+
+                <pre>
+
+
+<code id="codeContent"></code> </pre>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+    <script>
+
+        const pages = [
+            ["01-counter", "Counter"],
+            ["02-toggle-theme", "Toggle Theme"],
+            ["03-modal", "Modal"],
+            ["04-dropdown", "Dropdown"],
+            ["05-accordion", "Accordion"],
+            ["06-tabs", "Tabs"],
+            ["07-sidebar", "Sidebar"],
+            ["08-todo-list", "Todo List"],
+            ["09-toast", "Toast"],
+            ["10-tooltip", "Tooltip"],
+            ["11-search-filter", "Search Filter"],
+            ["12-pagination", "Pagination"],
+            ["13-fetch-user-list", "Fetch User List"],
+            ["14-crud-user", "CRUD User"],
+            ["15-autocomplete", "Autocomplete"],
+            ["16-infinite-scroll", "Infinite Scroll"],
+            ["17-multi-select", "Multi Select"],
+            ["18-drag-and-drop", "Drag and Drop"],
+            ["19-kanban-board", "Kanban Board"],
+            ["20-date-picker", "Date Picker"]
+        ];
+
+        const menu =
+            document.getElementById("menu");
+
+        const viewer =
+            document.getElementById("viewer");
+
+        const codeContent =
+            document.getElementById("codeContent");
+
+        const previewPanel =
+            document.getElementById("previewPanel");
+
+        const codePanel =
+            document.getElementById("codePanel");
+
+        const previewBtn =
+            document.getElementById("previewBtn");
+
+        const codeBtn =
+            document.getElementById("codeBtn");
+
+        const splitBtn =
+            document.getElementById("splitBtn");
+
+        let currentMode = "preview";
+
+        pages.forEach(([slug, title]) => {
+
+            const a =
+                document.createElement("a");
+
+            a.href = `#/${slug}`;
+            a.textContent = title;
+
+            menu.appendChild(a);
+        });
+
+        function setActiveMode(mode) {
+
+            currentMode = mode;
+
+            previewBtn.classList.remove("active");
+            codeBtn.classList.remove("active");
+            splitBtn.classList.remove("active");
+
+            if (mode === "preview") {
+
+                previewBtn.classList.add("active");
+
+                previewPanel.style.display = "block";
+                previewPanel.style.flex = "1";
+
+                codePanel.style.display = "none";
+            }
+
+            if (mode === "code") {
+
+                codeBtn.classList.add("active");
+
+                previewPanel.style.display = "none";
+
+                codePanel.style.display = "block";
+                codePanel.style.flex = "1";
+            }
+
+            if (mode === "split") {
+
+                splitBtn.classList.add("active");
+
+                previewPanel.style.display = "block";
+                codePanel.style.display = "block";
+
+                previewPanel.style.flex = "1";
+                codePanel.style.flex = "1";
+            }
+        }
+
+        async function loadPage() {
+
+            const slug =
+                location.hash.replace("#/", "")
+                || "01-counter";
+
+            document
+                .querySelectorAll(".menu a")
+                .forEach(a => {
+
+                    a.classList.toggle(
+                        "active",
+                        a.getAttribute("href")
+                        === `#/${slug}`
+                    );
+
+                });
+
+            const file =
+                `pages/${slug}.html`;
+
+            viewer.src = file;
+
+            try {
+
+                const response =
+                    await fetch(file);
+
+                const html =
+                    await response.text();
+
+                codeContent.textContent =
+                    html;
+
+            } catch {
+
+                codeContent.textContent =
+                    "Failed to load source code.";
+
+            }
+        }
+
+        previewBtn.addEventListener(
+            "click",
+            () => {
+                setActiveMode("preview");
+            }
+        );
+
+        codeBtn.addEventListener(
+            "click",
+            () => {
+                setActiveMode("code");
+            }
+        );
+
+        splitBtn.addEventListener(
+            "click",
+            () => {
+                setActiveMode("split");
+            }
+        );
+
+        window.addEventListener(
+            "hashchange",
+            loadPage
+        );
+
+        setActiveMode("preview");
+        loadPage();
+
+    </script>
+
+</body>
+
+</html>
