@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        #suggestions {
+            border: 1px solid #ddd;
+        }
+
+        .item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .item:hover {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <input id="search" placeholder="Search...">
+
+    <div id="suggestions"></div>
+
+    <script>
+        const countries = [
+            "Indonesia",
+            "Malaysia",
+            "Singapore",
+            "Thailand",
+            "Vietnam",
+            "Japan",
+            "China",
+            "Korea"
+        ];
+
+        const search = document.getElementById("search");
+
+        const suggestions =
+            document.getElementById(
+                "suggestions"
+            );
+
+        function debounce(fn, delay) {
+
+            let timeout;
+
+            return function (...args) {
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(() => {
+                    fn.apply(this, args);
+                }, delay);
+            };
+        }
+
+        function searchCountry() {
+
+            const keyword =
+                search.value.toLowerCase();
+
+            if (!keyword) {
+
+                suggestions.innerHTML = "";
+                return;
+            }
+
+            const result =
+                countries.filter(country =>
+                    country
+                        .toLowerCase()
+                        .includes(keyword)
+                );
+
+            suggestions.innerHTML =
+                result.map(country => `
+            <div class="item">
+                ${country}
+            </div>
+        `).join("");
+        }
+
+        search.addEventListener(
+            "input",
+            debounce(searchCountry, 300)
+        );
+    </script>
+
+</body>
+
+</html>

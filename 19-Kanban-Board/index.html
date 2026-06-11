@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .board {
+            display: flex;
+            gap: 20px;
+        }
+
+        .column {
+            flex: 1;
+            padding: 10px;
+            background: #f5f5f5;
+            min-height: 300px;
+        }
+
+        .card {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="board">
+
+        <div class="column" data-column="todo">
+
+            <h3>Todo</h3>
+
+            <div class="card" draggable="true">
+                Task A
+            </div>
+
+        </div>
+
+        <div class="column" data-column="doing">
+
+            <h3>Doing</h3>
+
+        </div>
+
+        <div class="column" data-column="done">
+
+            <h3>Done</h3>
+
+        </div>
+
+    </div>
+
+    <script>
+        let dragged = null;
+
+        document
+            .querySelectorAll(".card")
+            .forEach(card => {
+
+                card.addEventListener(
+                    "dragstart",
+                    () => dragged = card
+                );
+            });
+
+        document
+            .querySelectorAll(".column")
+            .forEach(column => {
+
+                column.addEventListener(
+                    "dragover",
+                    e => e.preventDefault()
+                );
+
+                column.addEventListener(
+                    "drop",
+                    () => {
+
+                        column.appendChild(
+                            dragged
+                        );
+                    }
+                );
+            });
+    </script>
+
+</body>
+
+</html>

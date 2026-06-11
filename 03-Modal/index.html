@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="openModal">
+        Open Modal
+    </button>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3>Modal Title</h3>
+
+            <p>Hello World</p>
+
+            <button id="closeModal">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("modal");
+
+        document.getElementById("openModal")
+            .addEventListener("click", () => {
+                modal.classList.add("active");
+            });
+
+        document.getElementById("closeModal")
+            .addEventListener("click", () => {
+                modal.classList.remove("active");
+            });
+
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.classList.remove("active");
+            }
+        });
+    </script>
+
+</body>
+
+</html>

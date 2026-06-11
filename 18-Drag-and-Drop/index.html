@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .item {
+            padding: 15px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            cursor: move;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="item" draggable="true">
+        Task 1
+    </div>
+
+    <div class="item" draggable="true">
+        Task 2
+    </div>
+
+    <div class="item" draggable="true">
+        Task 3
+    </div>
+
+    <script>
+        let dragged = null;
+
+        document
+            .querySelectorAll(".item")
+            .forEach(item => {
+
+                item.addEventListener(
+                    "dragstart",
+                    () => {
+                        dragged = item;
+                    }
+                );
+
+                item.addEventListener(
+                    "dragover",
+                    e => {
+                        e.preventDefault();
+                    }
+                );
+
+                item.addEventListener(
+                    "drop",
+                    () => {
+
+                        const parent =
+                            dragged.parentNode;
+
+                        parent.insertBefore(
+                            dragged,
+                            item
+                        );
+                    }
+                );
+            });
+    </script>
+
+</body>
+
+</html>

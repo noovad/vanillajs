@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .item {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #loader {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Infinite Scroll</h2>
+
+    <div id="list"></div>
+
+    <div id="loader">
+        Loading...
+    </div>
+
+    <script>
+        const list =
+            document.getElementById("list");
+
+        const loader =
+            document.getElementById("loader");
+
+        let page = 1;
+
+        function loadItems() {
+
+            const items =
+                Array.from(
+                    { length: 10 },
+                    (_, i) =>
+                        `Item ${(page - 1) * 10 + i + 1}`
+                );
+
+            items.forEach(item => {
+
+                const div =
+                    document.createElement("div");
+
+                div.className = "item";
+
+                div.textContent = item;
+
+                list.appendChild(div);
+            });
+
+            page++;
+        }
+
+        const observer =
+            new IntersectionObserver(entries => {
+
+                if (entries[0].isIntersecting) {
+
+                    loadItems();
+                }
+            });
+
+        observer.observe(loader);
+
+        loadItems();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Search User</h2>
+
+    <input id="search" placeholder="Search user...">
+
+    <ul id="list"></ul>
+
+    <script>
+        const users = [
+            "John",
+            "Jane",
+            "Michael",
+            "Sarah",
+            "David",
+            "Alex",
+            "Emma"
+        ];
+
+        const search =
+            document.getElementById("search");
+
+        const list =
+            document.getElementById("list");
+
+        function render(data) {
+
+            list.innerHTML = data
+                .map(user => `<li>${user}</li>`)
+                .join("");
+        }
+
+        search.addEventListener("input", () => {
+
+            const keyword =
+                search.value.toLowerCase();
+
+            const filtered =
+                users.filter(user =>
+                    user.toLowerCase()
+                        .includes(keyword)
+                );
+
+            render(filtered);
+        });
+
+        render(users);
+    </script>
+
+</body>
+
+</html>

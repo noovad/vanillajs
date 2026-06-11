@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .calendar {
+            width: 300px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns:
+                repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .day {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .day:hover {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calendar">
+
+        <div class="header">
+            <button id="prev">
+                ←
+            </button>
+
+            <h3 id="month"></h3>
+
+            <button id="next">
+                →
+            </button>
+        </div>
+
+        <div class="days"></div>
+
+    </div>
+
+    <script>
+        const monthEl =
+            document.getElementById("month");
+
+        const daysEl =
+            document.querySelector(".days");
+
+        let current =
+            new Date();
+
+        function render() {
+
+            const year =
+                current.getFullYear();
+
+            const month =
+                current.getMonth();
+
+            const totalDays =
+                new Date(
+                    year,
+                    month + 1,
+                    0
+                ).getDate();
+
+            monthEl.textContent =
+                current.toLocaleString(
+                    "en",
+                    {
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
+
+            daysEl.innerHTML = "";
+
+            for (
+                let day = 1;
+                day <= totalDays;
+                day++
+            ) {
+
+                const div =
+                    document.createElement("div");
+
+                div.className = "day";
+
+                div.textContent = day;
+
+                daysEl.appendChild(div);
+            }
+        }
+
+        document
+            .getElementById("prev")
+            .addEventListener(
+                "click",
+                () => {
+                    current.setMonth(
+                        current.getMonth() - 1
+                    );
+                    render();
+                }
+            );
+
+        document
+            .getElementById("next")
+            .addEventListener(
+                "click",
+                () => {
+                    current.setMonth(
+                        current.getMonth() + 1
+                    );
+                    render();
+                }
+            );
+
+        render();
+    </script>
+
+</body>
+
+</html>

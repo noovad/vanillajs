@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <ul id="list"></ul>
+
+    <div id="pagination"></div>
+
+    <script>
+        const users =
+            Array.from(
+                { length: 50 },
+                (_, i) => `User ${i + 1}`
+            );
+
+        const PAGE_SIZE = 5;
+
+        let currentPage = 1;
+
+        function render() {
+
+            const start =
+                (currentPage - 1) * PAGE_SIZE;
+
+            const end =
+                start + PAGE_SIZE;
+
+            document
+                .getElementById("list")
+                .innerHTML =
+                users
+                    .slice(start, end)
+                    .map(user =>
+                        `<li>${user}</li>`
+                    )
+                    .join("");
+
+            const totalPages =
+                Math.ceil(
+                    users.length / PAGE_SIZE
+                );
+
+            document
+                .getElementById("pagination")
+                .innerHTML =
+                Array.from(
+                    { length: totalPages },
+                    (_, i) => `
+                    <button
+                        data-page="${i + 1}">
+                        ${i + 1}
+                    </button>
+                `
+                ).join("");
+        }
+
+        document
+            .getElementById("pagination")
+            .addEventListener("click", (e) => {
+
+                if (e.target.dataset.page) {
+
+                    currentPage =
+                        Number(
+                            e.target.dataset.page
+                        );
+
+                    render();
+                }
+            });
+
+        render();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .selected {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            background: #eee;
+            padding: 5px 10px;
+        }
+
+        .item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .item:hover {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Multi Select</h2>
+
+    <div class="selected"></div>
+
+    <input id="search" placeholder="Search country" />
+
+    <div id="dropdown"></div>
+
+    <script>
+        const countries = [
+            "Indonesia",
+            "Malaysia",
+            "Singapore",
+            "Thailand",
+            "Vietnam",
+            "Japan"
+        ];
+
+        let selected = [];
+
+        const selectedEl =
+            document.querySelector(".selected");
+
+        const dropdown =
+            document.getElementById("dropdown");
+
+        const search =
+            document.getElementById("search");
+
+        function render(keyword = "") {
+
+            selectedEl.innerHTML =
+                selected.map(item => `
+            <span class="tag">
+                ${item}
+            </span>
+        `).join("");
+
+            dropdown.innerHTML =
+                countries
+                    .filter(item =>
+                        item
+                            .toLowerCase()
+                            .includes(
+                                keyword.toLowerCase()
+                            )
+                    )
+                    .filter(item =>
+                        !selected.includes(item)
+                    )
+                    .map(item => `
+                <div
+                    class="item"
+                    data-value="${item}">
+                    ${item}
+                </div>
+            `)
+                    .join("");
+        }
+
+        dropdown.addEventListener(
+            "click",
+            e => {
+
+                if (!e.target.dataset.value)
+                    return;
+
+                selected.push(
+                    e.target.dataset.value
+                );
+
+                search.value = "";
+
+                render();
+            }
+        );
+
+        search.addEventListener(
+            "input",
+            () => render(search.value)
+        );
+
+        render();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="form">
+        <input id="name" placeholder="User name" required>
+
+        <button>Add</button>
+    </form>
+
+    <ul id="list"></ul>
+
+    <script>
+        let users = [
+            "John",
+            "Sarah"
+        ];
+
+        const form =
+            document.getElementById("form");
+
+        const list =
+            document.getElementById("list");
+
+        function render() {
+
+            list.innerHTML =
+                users.map((user, index) => `
+            <li>
+                ${user}
+
+                <button
+                    data-index="${index}">
+                    Delete
+                </button>
+            </li>
+        `).join("");
+        }
+
+        form.addEventListener("submit", (e) => {
+
+            e.preventDefault();
+
+            users.push(
+                document
+                    .getElementById("name")
+                    .value
+            );
+
+            form.reset();
+
+            render();
+        });
+
+        list.addEventListener("click", (e) => {
+
+            if (e.target.dataset.index) {
+
+                users.splice(
+                    e.target.dataset.index,
+                    1
+                );
+
+                render();
+            }
+        });
+
+        render();
+    </script>
+
+</body>
+
+</html>

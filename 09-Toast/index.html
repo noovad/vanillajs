@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+
+        .toast {
+            background: #333;
+            color: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="showToast">
+        Show Toast
+    </button>
+
+    <div class="toast-container"></div>
+
+    <script>
+        const container =
+            document.querySelector(".toast-container");
+
+        function showToast(message) {
+
+            const toast =
+                document.createElement("div");
+
+            toast.className = "toast";
+
+            toast.textContent = message;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        document
+            .getElementById("showToast")
+            .addEventListener("click", () => {
+                showToast("Data saved successfully");
+            });
+    </script>
+
+</body>
+
+</html>
