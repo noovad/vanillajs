@@ -1,75 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            font-family: Arial;
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
+          @apply h-screen flex justify-center mt-20;
         }
-
         input {
-            width: 100%;
-            padding: 10px;
+          @apply border rounded-md w-xs px-4 py-2;
         }
-
         li {
-            margin: 10px 0;
+          @apply border rounded-md my-2 px-2 py-1;
         }
+      }
     </style>
-</head>
-
-<body>
-
-    <h2>Search User</h2>
-
-    <input id="search" placeholder="Search user...">
-
-    <ul id="list"></ul>
-
+  </head>
+  <body>
+    <main>
+      <input id="search" placeholder="Search user..." />
+      <ul id="list"></ul>
+    </main>
     <script>
-        const users = [
-            "John",
-            "Jane",
-            "Michael",
-            "Sarah",
-            "David",
-            "Alex",
-            "Emma"
-        ];
-
-        const search =
-            document.getElementById("search");
-
-        const list =
-            document.getElementById("list");
-
-        function render(data) {
-
-            list.innerHTML = data
-                .map(user => `<li>${user}</li>`)
-                .join("");
-        }
-
-        search.addEventListener("input", () => {
-
-            const keyword =
-                search.value.toLowerCase();
-
-            const filtered =
-                users.filter(user =>
-                    user.toLowerCase()
-                        .includes(keyword)
-                );
-
-            render(filtered);
-        });
-
-        render(users);
+      const users = ["John", "Jane", "Michael", "Sarah", "David", "Alex", "Emma"];
+      const search = document.getElementById("search");
+      const list = document.getElementById("list");
+      function render(data) {
+        list.innerHTML = data.map((user) => `<li>${user}</li>`).join("");
+      }
+      search.addEventListener("input", () => {
+        const keyword = search.value.toLowerCase();
+        const filtered = users.filter((user) => user.toLowerCase().includes(keyword));
+        render(filtered);
+      });
+      render(users);
     </script>
-
-</body>
-
+  </body>
 </html>

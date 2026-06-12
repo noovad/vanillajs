@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.ico" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>JavaScript Components Gallery</title>
+
+    <title>JavaScript Gallery</title>
+
     <style type="text/tailwindcss">
       @layer utilities {
         .active-menu {
@@ -21,10 +24,7 @@
       <nav id="menu" class="grid font-medium p-4 text-lg space-y-4 overflow-y-scroll"></nav>
     </aside>
     <main class="flex-1 h-full overflow-auto">
-      <button
-        id="toggleMode"
-        class="absolute top-4 right-4 bg-white p-2 rounded text-xl font-extrabold border-2"
-      ></button>
+      <button id="toggleMode" class="fixed top-4 right-4 bg-white p-2 rounded text-xl font-extrabold border-2"></button>
       <iframe id="viewer" class="w-full h-full"> </iframe>
       <pre id="codePanel" class="m-8"> <code id="codeContent"></code> </pre>
     </main>
@@ -46,10 +46,10 @@
         ["14-crud-user", "CRUD User"],
         ["15-autocomplete", "Autocomplete"],
         ["16-infinite-scroll", "Infinite Scroll"],
-        ["17-multi-select", "Multi Select"],
-        ["18-drag-and-drop", "Drag and Drop"],
-        ["19-kanban-board", "Kanban Board"],
-        ["20-date-picker", "Date Picker"],
+        // ["17-multi-select", "Multi Select"],
+        // ["18-drag-and-drop", "Drag and Drop"],
+        // ["19-kanban-board", "Kanban Board"],
+        // ["20-date-picker", "Date Picker"],
       ];
       const menu = document.getElementById("menu");
       const viewer = document.getElementById("viewer");
@@ -61,16 +61,16 @@
 
       pages.forEach(([slug, title], i) => {
         const a = document.createElement("a");
-        a.href = `#/${slug}`;
+        a.href = `/#${slug}`;
         a.textContent = `➜ ${i + 1}. ${title}`;
         a.classList.add(..."border rounded p-2".split(" "));
         menu.appendChild(a);
       });
 
       async function loadPage() {
-        const slug = location.hash.replace("#/", "") || "01-counter";
+        const slug = location.hash.replace("#", "") || "01-counter";
         menu.querySelectorAll("a").forEach((a) => {
-          a.classList.toggle("active-menu", a.getAttribute("href") === `#/${slug}`);
+          a.classList.toggle("active-menu", a.getAttribute("href") === `/#${slug}`);
         });
         const file = `pages/${slug}.html`;
         viewer.src = file;

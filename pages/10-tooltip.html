@@ -1,65 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
-        .tooltip {
-            position: fixed;
-            background: #333;
-            color: white;
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            pointer-events: none;
-            display: none;
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
+        body {
+          @apply h-screen grid place-items-center;
         }
+        p {
+          @apply text-lg font-medium;
+        }
+        span {
+          @apply text-xl font-bold;
+        }
+      }
+
+      @layer utilities {
+        .tooltip {
+          @apply fixed bg-gray-800 text-white px-2 py-4 rounded-md hidden pointer-events-none;
+        }
+      }
     </style>
-</head>
-
-<body>
-
+  </head>
+  <body>
     <p>
-        Hover
-        <span data-tooltip="Tooltip Example" class="target">
-            this text
-        </span>
+      Hover
+      <span data-tooltip="Tooltip Example" class="target"> this text </span>
     </p>
-
     <div class="tooltip"></div>
-
     <script>
-        const tooltip =
-            document.querySelector(".tooltip");
-
-        document
-            .querySelector(".target")
-            .addEventListener("mouseenter", (e) => {
-
-                tooltip.style.display = "block";
-
-                tooltip.textContent =
-                    e.target.dataset.tooltip;
-            });
-
-        document
-            .querySelector(".target")
-            .addEventListener("mousemove", (e) => {
-
-                tooltip.style.left =
-                    e.clientX + 15 + "px";
-
-                tooltip.style.top =
-                    e.clientY + 15 + "px";
-            });
-
-        document
-            .querySelector(".target")
-            .addEventListener("mouseleave", () => {
-
-                tooltip.style.display = "none";
-            });
+      const tooltip = document.querySelector(".tooltip");
+      document.querySelector(".target").addEventListener("mouseenter", (e) => {
+        tooltip.style.display = "block";
+        tooltip.textContent = e.target.dataset.tooltip;
+      });
+      document.querySelector(".target").addEventListener("mousemove", (e) => {
+        tooltip.style.left = e.clientX + 15 + "px";
+        tooltip.style.top = e.clientY + 15 + "px";
+      });
+      document.querySelector(".target").addEventListener("mouseleave", () => {
+        tooltip.style.display = "none";
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

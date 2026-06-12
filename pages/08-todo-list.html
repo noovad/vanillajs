@@ -1,50 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            font-family: Arial;
-            max-width: 600px;
-            margin: auto;
-            padding: 30px;
+          @apply h-screen flex justify-center mt-20;
         }
-
+        button {
+          @apply px-6 cursor-pointer border font-medium text-lg rounded-lg;
+        }
+        input {
+          @apply border rounded-md py-1 px-2;
+        }
         li {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
+          @apply flex justify-between my-2;
         }
+      }
     </style>
-</head>
-
-<body>
-
-    <h2>Todo List</h2>
-
-    <form id="todoForm">
-        <input id="todoInput" placeholder="New task" required>
+  </head>
+  <body>
+    <main>
+      <form id="todoForm">
+        <input id="todoInput" placeholder="New task" required />
         <button>Add</button>
-    </form>
-
-    <ul id="todoList"></ul>
-
+      </form>
+      <ul id="todoList"></ul>
+    </main>
     <script>
-        let todos = [];
-
-        const form =
-            document.getElementById("todoForm");
-
-        const input =
-            document.getElementById("todoInput");
-
-        const list =
-            document.getElementById("todoList");
-
-        function render() {
-
-            list.innerHTML = todos
-                .map((todo, index) => `
+      let todos = [];
+      const form = document.getElementById("todoForm");
+      const input = document.getElementById("todoInput");
+      const list = document.getElementById("todoList");
+      function render() {
+        list.innerHTML = todos
+          .map(
+            (todo, index) => `
             <li>
                 ${todo}
                 <button
@@ -53,40 +44,24 @@
                     Delete
                 </button>
             </li>
-        `)
-                .join("");
-        }
-
-        form.addEventListener("submit", (e) => {
-
-            e.preventDefault();
-
-            todos.push(input.value);
-
-            input.value = "";
-
-            render();
-        });
-
-        list.addEventListener("click", (e) => {
-
-            if (
-                e.target.classList.contains(
-                    "delete-btn"
-                )
-            ) {
-                const index =
-                    Number(e.target.dataset.index);
-
-                todos.splice(index, 1);
-
-                render();
-            }
-        });
-
+        `,
+          )
+          .join("");
+      }
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        todos.push(input.value);
+        input.value = "";
         render();
+      });
+      list.addEventListener("click", (e) => {
+        if (e.target.classList.contains("delete-btn")) {
+          const index = Number(e.target.dataset.index);
+          todos.splice(index, 1);
+          render();
+        }
+      });
+      render();
     </script>
-
-</body>
-
+  </body>
 </html>

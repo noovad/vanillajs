@@ -1,52 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            transition: .3s;
-            font-family: Arial;
+          @apply h-screen grid place-items-center;
+          @apply transition-all duration-300;
         }
-
-        .dark {
-            background: #111;
-            color: white;
-        }
-
         button {
-            padding: 10px 20px;
+          @apply px-4 py-1 cursor-pointer border-2 font-bold text-xl rounded-lg;
         }
+      }
+
+      @layer utilities {
+        .dark {
+          background: #111;
+          color: white;
+        }
+      }
     </style>
-</head>
-
-<body>
-
-    <button id="themeBtn">
-        Toggle Theme
-    </button>
-
+  </head>
+  <body>
+    <button id="themeBtn"></button>
     <script>
-        const body = document.body;
-        const btn = document.getElementById("themeBtn");
+      const body = document.body;
+      const btn = document.getElementById("themeBtn");
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        body.classList.add("dark");
+        btn.textContent = "Dark Mode";
+      } else {
+        btn.textContent = "Light Mode";
+      }
 
-        const savedTheme = localStorage.getItem("theme");
-
-        if (savedTheme === "dark") {
-            body.classList.add("dark");
-        }
-
-        btn.addEventListener("click", () => {
-            body.classList.toggle("dark");
-
-            localStorage.setItem(
-                "theme",
-                body.classList.contains("dark")
-                    ? "dark"
-                    : "light"
-            );
-        });
+      btn.addEventListener("click", () => {
+        body.classList.toggle("dark");
+        localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+        btn.textContent = body.classList.contains("dark") ? "Dark Mode" : "Light Mode";
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

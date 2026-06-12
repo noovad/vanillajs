@@ -1,59 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
+        body {
+          @apply h-screen grid place-items-center;
+        }
+        button {
+          @apply px-6 cursor-pointer border font-medium text-lg rounded-lg;
+        }
+      }
 
-<head>
-    <style>
+      @layer utilities {
         .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+          @apply fixed top-5 end-5;
         }
-
         .toast {
-            background: #333;
-            color: white;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 4px;
+          @apply bg-gray-800 text-white p-3 mb-2 rounded-md;
         }
+      }
     </style>
-</head>
-
-<body>
-
-    <button id="showToast">
-        Show Toast
-    </button>
-
+  </head>
+  <body>
+    <button id="showToast">Show Toast</button>
     <div class="toast-container"></div>
-
     <script>
-        const container =
-            document.querySelector(".toast-container");
-
-        function showToast(message) {
-
-            const toast =
-                document.createElement("div");
-
-            toast.className = "toast";
-
-            toast.textContent = message;
-
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        document
-            .getElementById("showToast")
-            .addEventListener("click", () => {
-                showToast("Data saved successfully");
-            });
+      const container = document.querySelector(".toast-container");
+      function showToast(message) {
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+      document.getElementById("showToast").addEventListener("click", () => {
+        showToast("Data saved successfully");
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

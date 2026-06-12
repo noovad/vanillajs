@@ -1,100 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            font-family: Arial;
-            max-width: 600px;
-            margin: auto;
+          @apply h-screen flex justify-center mt-20;
         }
+        input {
+          @apply border rounded-md py-1 px-2;
+        }
+      }
 
+      @layer utilities {
         #suggestions {
-            border: 1px solid #ddd;
+          @apply border rounded-md border-gray-400 mt-2 empty:hidden;
         }
-
         .item {
-            padding: 10px;
-            cursor: pointer;
+          @apply p-2 cursor-pointer;
         }
-
         .item:hover {
-            background: #eee;
+          @apply bg-gray-100;
         }
+      }
     </style>
-</head>
-
-<body>
-
-    <input id="search" placeholder="Search...">
-
-    <div id="suggestions"></div>
-
+  </head>
+  <body>
+    <main>
+      <input id="search" placeholder="Search..." />
+      <div id="suggestions"></div>
+    </main>
     <script>
-        const countries = [
-            "Indonesia",
-            "Malaysia",
-            "Singapore",
-            "Thailand",
-            "Vietnam",
-            "Japan",
-            "China",
-            "Korea"
-        ];
-
-        const search = document.getElementById("search");
-
-        const suggestions =
-            document.getElementById(
-                "suggestions"
-            );
-
-        function debounce(fn, delay) {
-
-            let timeout;
-
-            return function (...args) {
-
-                clearTimeout(timeout);
-
-                timeout = setTimeout(() => {
-                    fn.apply(this, args);
-                }, delay);
-            };
+      const countries = ["Indonesia", "Malaysia", "Singapore", "Thailand", "Vietnam", "Japan", "China", "Korea"];
+      const search = document.getElementById("search");
+      const suggestions = document.getElementById("suggestions");
+      function debounce(fn, delay) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            fn.apply(this, args);
+          }, delay);
+        };
+      }
+      function searchCountry() {
+        const keyword = search.value.toLowerCase();
+        if (!keyword) {
+          suggestions.innerHTML = "";
+          return;
         }
-
-        function searchCountry() {
-
-            const keyword =
-                search.value.toLowerCase();
-
-            if (!keyword) {
-
-                suggestions.innerHTML = "";
-                return;
-            }
-
-            const result =
-                countries.filter(country =>
-                    country
-                        .toLowerCase()
-                        .includes(keyword)
-                );
-
-            suggestions.innerHTML =
-                result.map(country => `
+        const result = countries.filter((country) => country.toLowerCase().includes(keyword));
+        suggestions.innerHTML = result
+          .map(
+            (country) => `
             <div class="item">
                 ${country}
             </div>
-        `).join("");
-        }
-
-        search.addEventListener(
-            "input",
-            debounce(searchCountry, 300)
-        );
+        `,
+          )
+          .join("");
+      }
+      search.addEventListener("input", debounce(searchCountry, 300));
     </script>
-
-</body>
-
+  </body>
 </html>

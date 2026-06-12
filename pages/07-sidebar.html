@@ -1,91 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            margin: 0;
-            font-family: Arial;
+          @apply h-screen grid place-items-center;
         }
-
-        .sidebar {
-            position: fixed;
-            left: -250px;
-            top: 0;
-            width: 250px;
-            height: 100vh;
-            background: #222;
-            color: white;
-            transition: .3s;
+        button {
+          @apply px-6 cursor-pointer border font-medium text-lg rounded-lg;
         }
-
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 20px;
-        }
-
-        .sidebar li {
-            margin-bottom: 15px;
-        }
-
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .4);
-            display: none;
-        }
-
-        .overlay.show {
-            display: block;
-        }
-
-        .menu-btn {
-            margin: 20px;
-        }
+      }
+      .sidebar {
+        @apply fixed -left-[250px] top-0 w-[250px] h-screen bg-gray-900 text-white transition-all duration-300 text-center pt-12;
+      }
+      .sidebar.open {
+        @apply left-0;
+      }
+      .overlay {
+        @apply fixed inset-0 bg-black/50 hidden;
+      }
+      .overlay.show {
+        @apply block;
+      }
     </style>
-</head>
-
-<body>
-
-    <button class="menu-btn">
-        Open Sidebar
-    </button>
-
+  </head>
+  <body>
+    <button class="menu-btn">Open Sidebar</button>
     <div class="overlay"></div>
-
     <div class="sidebar">
-        <ul>
-            <li>Dashboard</li>
-            <li>Users</li>
-            <li>Settings</li>
-        </ul>
+      <span>This is sidebar</span>
     </div>
-
     <script>
-        const sidebar =
-            document.querySelector(".sidebar");
-
-        const overlay =
-            document.querySelector(".overlay");
-
-        const btn =
-            document.querySelector(".menu-btn");
-
-        btn.addEventListener("click", () => {
-            sidebar.classList.add("open");
-            overlay.classList.add("show");
-        });
-
-        overlay.addEventListener("click", () => {
-            sidebar.classList.remove("open");
-            overlay.classList.remove("show");
-        });
+      const sidebar = document.querySelector(".sidebar");
+      const overlay = document.querySelector(".overlay");
+      const btn = document.querySelector(".menu-btn");
+      btn.addEventListener("click", () => {
+        sidebar.classList.add("open");
+        overlay.classList.add("show");
+      });
+      overlay.addEventListener("click", () => {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("show");
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

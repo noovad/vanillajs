@@ -1,73 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            font-family: Arial;
+          @apply h-screen grid place-items-center;
         }
-
+        button {
+          @apply px-4 py-1 cursor-pointer border-2 font-bold text-xl rounded-lg;
+        }
+      }
+      @layer utilities {
         .dropdown {
-            position: relative;
-            width: 200px;
+          @apply relative w-52;
         }
-
         .menu {
-            display: none;
-            position: absolute;
-            width: 100%;
-            border: 1px solid #ddd;
-            background: white;
+          @apply hidden absolute rounded-md w-full border border-gray-300 bg-white;
         }
-
         .menu.active {
-            display: block;
+          @apply block mt-2;
         }
-
         .item {
-            padding: 10px;
-            cursor: pointer;
+          @apply p-2.5 cursor-pointer;
         }
-
         .item:hover {
-            background: #eee;
+          @apply bg-gray-200;
         }
+      }
     </style>
-</head>
-
-<body>
-
+  </head>
+  <body>
     <div class="dropdown">
-        <button id="toggleBtn">
-            Select Menu
-        </button>
-
-        <div class="menu" id="menu">
-            <div class="item">Profile</div>
-            <div class="item">Settings</div>
-            <div class="item">Logout</div>
-        </div>
+      <button id="toggleBtn">Select Menu</button>
+      <div class="menu" id="menu">
+        <div class="item">Profile</div>
+        <div class="item">Settings</div>
+        <div class="item">Logout</div>
+      </div>
     </div>
-
     <script>
-        const btn = document.getElementById("toggleBtn");
-        const menu = document.getElementById("menu");
+      const btn = document.getElementById("toggleBtn");
+      const menu = document.getElementById("menu");
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("active");
+      });
+      document.addEventListener("click", (e) => {
+        const insideDropdown = e.target.closest(".dropdown");
 
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("active");
-        });
-
-        document.addEventListener("click", (e) => {
-
-            const insideDropdown =
-                e.target.closest(".dropdown");
-
-            if (!insideDropdown) {
-                menu.classList.remove("active");
-            }
-        });
+        if (!insideDropdown) {
+          menu.classList.remove("active");
+        }
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

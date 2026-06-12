@@ -1,92 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            font-family: Arial;
-            max-width: 600px;
-            margin: auto;
+          @apply h-screen grid place-items-center;
         }
-
         button {
-            margin: 5px;
+          @apply px-3 cursor-pointer border font-medium text-lg rounded-lg;
         }
+        button.active {
+          @apply bg-black text-white border-none;
+        }
+        ul {
+          @apply font-medium;
+        }
+      }
     </style>
-</head>
-
-<body>
-
-    <ul id="list"></ul>
-
-    <div id="pagination"></div>
-
+  </head>
+  <body>
+    <main>
+      <ul id="list"></ul>
+      <div id="pagination"></div>
+    </main>
     <script>
-        const users =
-            Array.from(
-                { length: 50 },
-                (_, i) => `User ${i + 1}`
-            );
-
-        const PAGE_SIZE = 5;
-
-        let currentPage = 1;
-
-        function render() {
-
-            const start =
-                (currentPage - 1) * PAGE_SIZE;
-
-            const end =
-                start + PAGE_SIZE;
-
-            document
-                .getElementById("list")
-                .innerHTML =
-                users
-                    .slice(start, end)
-                    .map(user =>
-                        `<li>${user}</li>`
-                    )
-                    .join("");
-
-            const totalPages =
-                Math.ceil(
-                    users.length / PAGE_SIZE
-                );
-
-            document
-                .getElementById("pagination")
-                .innerHTML =
-                Array.from(
-                    { length: totalPages },
-                    (_, i) => `
-                    <button
+      const users = Array.from({ length: 50 }, (_, i) => `${i + 1}. User `);
+      const PAGE_SIZE = 10;
+      let currentPage = 1;
+      function render() {
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const end = start + PAGE_SIZE;
+        document.getElementById("list").innerHTML = users
+          .slice(start, end)
+          .map((user) => `<li>${user}</li>`)
+          .join("");
+        const totalPages = Math.ceil(users.length / PAGE_SIZE);
+        document.getElementById("pagination").innerHTML = Array.from(
+          { length: totalPages },
+          (_, i) => `
+                    <button class="${currentPage === i + 1 ? "active" : ""}"
                         data-page="${i + 1}">
                         ${i + 1}
                     </button>
-                `
-                ).join("");
+                `,
+        ).join("");
+      }
+      document.getElementById("pagination").addEventListener("click", (e) => {
+        if (e.target.dataset.page) {
+          currentPage = Number(e.target.dataset.page);
+          render();
         }
-
-        document
-            .getElementById("pagination")
-            .addEventListener("click", (e) => {
-
-                if (e.target.dataset.page) {
-
-                    currentPage =
-                        Number(
-                            e.target.dataset.page
-                        );
-
-                    render();
-                }
-            });
-
-        render();
+      });
+      render();
     </script>
-
-</body>
-
+  </body>
 </html>

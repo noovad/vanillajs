@@ -1,63 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
-    <title>Counter</title>
-    <style>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @layer base {
         body {
-            font-family: Arial;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+          @apply h-screen grid place-items-center;
         }
-
-        .counter {
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 60px;
-        }
-
         button {
-            padding: 10px 20px;
-            cursor: pointer;
+          @apply px-10 cursor-pointer border font-bold text-4xl rounded-lg;
         }
+        h1 {
+          @apply text-9xl font-extrabold;
+        }
+      }
+
+      @layer utilities {
+        .counter {
+          @apply text-center;
+        }
+        .button-section {
+          @apply flex justify-center gap-2;
+        }
+      }
     </style>
-</head>
-
-<body>
-
-    <div class="counter">
-        <h1 id="count">0</h1>
-
+  </head>
+  <body>
+    <main class="counter">
+      <h1 id="count">0</h1>
+      <div class="button-section">
         <button id="decrease">-</button>
         <button id="increase">+</button>
-    </div>
-
+      </div>
+    </main>
     <script>
-        let count = 0;
-
-        const countEl = document.getElementById("count");
-
-        function render() {
-            countEl.textContent = count;
-        }
-
-        document.getElementById("increase").addEventListener("click", () => {
-            count++;
-            render();
-        });
-
-        document.getElementById("decrease").addEventListener("click", () => {
-            count--;
-            render();
-        });
-
+      let count = 0;
+      const countEl = document.getElementById("count");
+      function render() {
+        countEl.textContent = count;
+      }
+      document.getElementById("increase").addEventListener("click", () => {
+        count++;
         render();
+      });
+      document.getElementById("decrease").addEventListener("click", () => {
+        count--;
+        render();
+      });
+      render();
     </script>
-
-</body>
-
+  </body>
 </html>
