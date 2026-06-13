@@ -70,16 +70,16 @@
 
       pages.forEach(([slug, title], i) => {
         const a = document.createElement("a");
-        a.href = `/#${slug}`;
+        a.href = `#/${slug}`;
         a.textContent = `➜ ${title}`;
         a.classList.add(..."border rounded p-2".split(" "));
         menu.appendChild(a);
       });
 
       async function loadPage() {
-        const slug = location.hash.replace("#", "") || "01-counter";
+        const slug = location.hash.replace("#/", "") || "01-counter";
         menu.querySelectorAll("a").forEach((a) => {
-          a.classList.toggle("active-menu", a.getAttribute("href") === `/#${slug}`);
+          a.classList.toggle("active-menu", a.getAttribute("href") === `#/${slug}`);
         });
         const file = `pages/${slug}.html`;
         viewer.src = file;
