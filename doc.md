@@ -1,307 +1,48 @@
-# Vanilla JavaScript Frontend Cheat Sheet
+# Vanilla JavaScript DOM Cheat Sheet
 
-> Catatan ringkas API, method, dan konsep yang paling sering digunakan dalam pengembangan frontend modern menggunakan Vanilla JavaScript.
-
----
-
-# 1. Array
-
-Digunakan untuk menyimpan banyak data.
-
-```js
-const users = ["John", "Sarah"];
-```
-
-## Menambah Data
-
-| Method      | Fungsi               |
-| ----------- | -------------------- |
-| `push()`    | Tambah data di akhir |
-| `unshift()` | Tambah data di awal  |
-
-```js
-users.push("Alex");
-users.unshift("Admin");
-```
+> Catatan ringkas API DOM, Event, dan Browser API yang paling sering digunakan dalam pengembangan frontend modern.
 
 ---
 
-## Menghapus Data
-
-| Method     | Fungsi                               |
-| ---------- | ------------------------------------ |
-| `pop()`    | Hapus data terakhir                  |
-| `shift()`  | Hapus data pertama                   |
-| `splice()` | Hapus/tambah data di posisi tertentu |
-
-```js
-users.pop();
-users.shift();
-users.splice(1, 1);
-```
-
----
-
-## Mengambil Data
-
-| Method    | Fungsi                       |
-| --------- | ---------------------------- |
-| `slice()` | Ambil sebagian data          |
-| `at()`    | Ambil item berdasarkan index |
-
-```js
-users.slice(0, 3);
-users.at(-1);
-```
-
----
-
-## Iterasi Data
-
-### forEach()
-
-Loop data.
-
-```js
-users.forEach(user => {
-    console.log(user);
-});
-```
-
-### map()
-
-Mengubah setiap item menjadi bentuk baru.
-
-```js
-users.map(user => user.name);
-```
-
-### filter()
-
-Menyaring data.
-
-```js
-users.filter(user => user.active);
-```
-
-### find()
-
-Mengambil satu data pertama yang cocok.
-
-```js
-users.find(user => user.id === 1);
-```
-
-### findIndex()
-
-Mengambil posisi data.
-
-```js
-users.findIndex(user => user.id === 1);
-```
-
-### some()
-
-Minimal satu data cocok.
-
-```js
-users.some(user => user.admin);
-```
-
-### every()
-
-Semua data harus cocok.
-
-```js
-users.every(user => user.active);
-```
-
-### reduce()
-
-Mengubah array menjadi satu nilai.
-
-```js
-cart.reduce(
-    (total, item) => total + item.price,
-    0
-);
-```
-
----
-
-## Pencarian Data
-
-### includes()
-
-Apakah nilai ada?
-
-```js
-users.includes("John");
-```
-
-### indexOf()
-
-Posisi nilai.
-
-```js
-users.indexOf("John");
-```
-
----
-
-## Sorting
-
-### sort()
-
-Urutkan data.
-
-Ascending:
-
-```js
-numbers.sort((a, b) => a - b);
-```
-
-Descending:
-
-```js
-numbers.sort((a, b) => b - a);
-```
-
-### reverse()
-
-Balik urutan data.
-
-```js
-users.reverse();
-```
-
----
-
-# 2. Object
-
-Digunakan untuk menyimpan data berbentuk key-value.
-
-```js
-const user = {
-    name: "John",
-    age: 25
-};
-```
-
-## Akses Data
-
-```js
-user.name;
-
-user["name"];
-```
-
----
-
-## Object Methods
-
-### Object.keys()
-
-Ambil semua key.
-
-```js
-Object.keys(user);
-```
-
-### Object.values()
-
-Ambil semua value.
-
-```js
-Object.values(user);
-```
-
-### Object.entries()
-
-Ambil key dan value.
-
-```js
-Object.entries(user);
-```
-
----
-
-# 3. Modern JavaScript
-
-## Destructuring
-
-### Object
-
-```js
-const { name, age } = user;
-```
-
-### Array
-
-```js
-const [firstUser] = users;
-```
-
----
-
-## Spread Operator (...)
-
-Copy array:
-
-```js
-const newUsers = [...users];
-```
-
-Copy object:
-
-```js
-const newUser = {
-    ...user
-};
-```
-
-Merge:
-
-```js
-const updatedUser = {
-    ...user,
-    active: true
-};
-```
-
----
-
-## Template Literal
-
-Membuat string dinamis.
-
-```js
-`Hello ${user.name}`
-```
-
----
-
-# 4. Document API
+# 1. Document API
 
 Digunakan untuk mencari elemen HTML.
 
-## Berdasarkan ID
+## getElementById()
+
+Mencari elemen berdasarkan id.
 
 ```js
-document.getElementById("menu");
+document.getElementById("app");
+```
+
+HTML:
+
+```html
+<div id="app"></div>
 ```
 
 ---
 
-## Berdasarkan Class
+## getElementsByClassName()
+
+Mencari elemen berdasarkan class.
 
 ```js
-document.getElementsByClassName("item");
+document.getElementsByClassName("card");
+```
+
+HTML:
+
+```html
+<div class="card"></div>
 ```
 
 ---
 
-## Berdasarkan Tag
+## getElementsByTagName()
+
+Mencari berdasarkan tag.
 
 ```js
 document.getElementsByTagName("button");
@@ -309,15 +50,27 @@ document.getElementsByTagName("button");
 
 ---
 
-## Berdasarkan CSS Selector
+## querySelector()
 
-### Satu Elemen
+Mengambil elemen pertama yang cocok.
 
 ```js
 document.querySelector(".btn");
 ```
 
-### Banyak Elemen
+```js
+document.querySelector("#app");
+```
+
+```js
+document.querySelector("[data-id]");
+```
+
+---
+
+## querySelectorAll()
+
+Mengambil banyak elemen.
 
 ```js
 document.querySelectorAll(".btn");
@@ -325,96 +78,194 @@ document.querySelectorAll(".btn");
 
 ---
 
-# 5. Element API
+# 2. Element API
 
-Digunakan untuk mengubah elemen HTML.
+Digunakan untuk membaca atau mengubah elemen.
 
-## Text
+---
 
-```js
-element.textContent
-```
+## textContent
 
-Mengubah teks.
+Mengambil atau mengubah teks.
 
 ```js
 title.textContent = "Dashboard";
 ```
 
----
-
-## HTML
-
 ```js
-element.innerHTML
-```
-
-Mengubah isi HTML.
-
-```js
-list.innerHTML = "<li>Item</li>";
+console.log(title.textContent);
 ```
 
 ---
 
-## Class
+## innerHTML
 
-Tambah class:
+Mengambil atau mengubah HTML.
+
+```js
+container.innerHTML =
+  "<h1>Hello</h1>";
+```
+
+---
+
+## value
+
+Digunakan pada input.
+
+```js
+input.value
+```
+
+```js
+input.value = "";
+```
+
+---
+
+## checked
+
+Digunakan pada checkbox.
+
+```js
+checkbox.checked
+```
+
+---
+
+## disabled
+
+Aktif/nonaktif elemen.
+
+```js
+button.disabled = true;
+```
+
+---
+
+## focus()
+
+Memberikan fokus.
+
+```js
+input.focus();
+```
+
+---
+
+## blur()
+
+Menghilangkan fokus.
+
+```js
+input.blur();
+```
+
+---
+
+# 3. Class Manipulation
+
+Mengelola class CSS.
+
+---
+
+## add()
+
+Tambah class.
 
 ```js
 element.classList.add("hidden");
 ```
 
-Hapus class:
+---
+
+## remove()
+
+Hapus class.
 
 ```js
 element.classList.remove("hidden");
 ```
 
-Toggle class:
+---
+
+## toggle()
+
+Tambah jika belum ada, hapus jika sudah ada.
 
 ```js
 element.classList.toggle("hidden");
 ```
 
-Cek class:
+Contoh modal:
 
 ```js
-element.classList.contains("hidden");
+modal.classList.toggle("hidden");
 ```
 
 ---
 
-## Attribute
+## contains()
 
-Ambil attribute:
-
-```js
-element.getAttribute("href");
-```
-
-Set attribute:
+Cek apakah class ada.
 
 ```js
-element.setAttribute("disabled", true);
-```
-
-Hapus attribute:
-
-```js
-element.removeAttribute("disabled");
+element.classList.contains("active");
 ```
 
 ---
 
-## Dataset
+# 4. Attribute API
 
-Mengakses atribut `data-*`.
+Mengelola atribut HTML.
+
+---
+
+## getAttribute()
+
+Ambil atribut.
+
+```js
+link.getAttribute("href");
+```
+
+---
+
+## setAttribute()
+
+Set atribut.
+
+```js
+button.setAttribute(
+  "disabled",
+  true
+);
+```
+
+---
+
+## removeAttribute()
+
+Hapus atribut.
+
+```js
+button.removeAttribute(
+  "disabled"
+);
+```
+
+---
+
+# 5. Dataset
+
+Mengakses atribut data-*.
 
 HTML:
 
 ```html
-<button data-id="10">
+<button data-id="5">
+  Edit
+</button>
 ```
 
 JS:
@@ -423,27 +274,54 @@ JS:
 button.dataset.id;
 ```
 
+Hasil:
+
+```js
+"5"
+```
+
+Sangat sering digunakan untuk:
+
+```text
+Edit Button
+Delete Button
+Pagination Button
+Tabs
+Dropdown
+```
+
 ---
 
 # 6. DOM Manipulation
 
-## Membuat Elemen
+Membuat dan mengubah elemen.
+
+---
+
+## createElement()
+
+Membuat elemen baru.
 
 ```js
-document.createElement("div");
+const div =
+  document.createElement("div");
 ```
 
 ---
 
-## Menambah Elemen
+## append()
+
+Tambah elemen.
 
 ```js
-append();
-appendChild();
-prepend();
+container.append(div);
 ```
 
-Contoh:
+---
+
+## appendChild()
+
+Tambah child.
 
 ```js
 container.appendChild(div);
@@ -451,27 +329,52 @@ container.appendChild(div);
 
 ---
 
-## Menghapus Elemen
+## prepend()
+
+Tambah di awal.
 
 ```js
-remove();
-removeChild();
+container.prepend(div);
 ```
 
 ---
 
-## Mengganti Elemen
+## remove()
+
+Menghapus elemen.
 
 ```js
-replaceWith();
+element.remove();
 ```
 
 ---
 
-## Clone Elemen
+## removeChild()
+
+Menghapus child tertentu.
 
 ```js
-cloneNode();
+container.removeChild(div);
+```
+
+---
+
+## replaceWith()
+
+Mengganti elemen.
+
+```js
+oldCard.replaceWith(newCard);
+```
+
+---
+
+## cloneNode()
+
+Menyalin elemen.
+
+```js
+card.cloneNode(true);
 ```
 
 ---
@@ -480,87 +383,119 @@ cloneNode();
 
 Navigasi antar elemen.
 
-## Parent
+---
+
+## parentElement
+
+Parent elemen.
 
 ```js
-element.parentElement;
+element.parentElement
 ```
 
 ---
 
-## Children
+## children
+
+Semua child.
 
 ```js
-element.children;
+element.children
 ```
 
 ---
 
-## Child Pertama
+## firstElementChild
+
+Child pertama.
 
 ```js
-element.firstElementChild;
+element.firstElementChild
 ```
 
 ---
 
-## Child Terakhir
+## lastElementChild
+
+Child terakhir.
 
 ```js
-element.lastElementChild;
+element.lastElementChild
 ```
 
 ---
 
-## Sibling Berikutnya
+## nextElementSibling
+
+Elemen setelahnya.
 
 ```js
-element.nextElementSibling;
+element.nextElementSibling
 ```
 
 ---
 
-## Sibling Sebelumnya
+## previousElementSibling
+
+Elemen sebelumnya.
 
 ```js
-element.previousElementSibling;
+element.previousElementSibling
 ```
 
 ---
 
-## Cari Parent Tertentu
+## closest()
+
+Cari parent terdekat.
 
 ```js
 element.closest(".card");
+```
+
+Sangat sering digunakan pada:
+
+```text
+Event Delegation
+Modal
+Table Action
 ```
 
 ---
 
 # 8. Event Listener
 
-## Menambahkan Event
+Menangani interaksi pengguna.
+
+---
+
+## addEventListener()
+
+Menambahkan event.
 
 ```js
-element.addEventListener(
-    "click",
-    handler
+button.addEventListener(
+  "click",
+  handleClick
 );
 ```
 
 ---
 
-## Menghapus Event
+## removeEventListener()
+
+Menghapus event.
 
 ```js
-element.removeEventListener(
-    "click",
-    handler
+button.removeEventListener(
+  "click",
+  handleClick
 );
 ```
 
 ---
 
-# 9. Event Yang Sering Digunakan
+# 9. Event Yang Paling Sering Digunakan
 
 ## Mouse
 
@@ -576,11 +511,13 @@ mousemove
 
 ---
 
-## Keyboard
+## Input
 
 ```text
-keydown
-keyup
+input
+change
+focus
+blur
 ```
 
 ---
@@ -588,11 +525,16 @@ keyup
 ## Form
 
 ```text
-input
-change
 submit
-focus
-blur
+```
+
+---
+
+## Keyboard
+
+```text
+keydown
+keyup
 ```
 
 ---
@@ -609,7 +551,13 @@ scroll
 
 # 10. Event Object
 
-## Target Yang Diklik
+Informasi event yang sedang terjadi.
+
+---
+
+## e.target
+
+Elemen yang diklik.
 
 ```js
 e.target
@@ -617,7 +565,9 @@ e.target
 
 ---
 
-## Element Listener
+## e.currentTarget
+
+Elemen yang memasang listener.
 
 ```js
 e.currentTarget
@@ -625,15 +575,26 @@ e.currentTarget
 
 ---
 
-## Tombol Keyboard
+## e.key
+
+Tombol keyboard.
 
 ```js
 e.key
 ```
 
+Contoh:
+
+```js
+if (e.key === "Enter") {
+}
+```
+
 ---
 
-## Mencegah Default Browser
+## preventDefault()
+
+Mencegah aksi default browser.
 
 ```js
 e.preventDefault();
@@ -641,12 +602,16 @@ e.preventDefault();
 
 Contoh:
 
-* Form submit
-* Link navigation
+```text
+Form Submit
+Link Navigation
+```
 
 ---
 
-## Menghentikan Bubbling
+## stopPropagation()
+
+Menghentikan bubbling.
 
 ```js
 e.stopPropagation();
@@ -654,38 +619,91 @@ e.stopPropagation();
 
 ---
 
-# 11. Browser APIs
+# 11. Event Delegation
 
-## Local Storage
+Satu listener untuk banyak elemen.
 
-Simpan data permanen.
+HTML:
 
-Simpan:
+```html
+<tbody id="users"></tbody>
+```
+
+JS:
+
+```js
+tbody.addEventListener(
+  "click",
+  (e) => {
+
+  }
+);
+```
+
+Cari tombol:
+
+```js
+const btn =
+  e.target.closest(
+    "[data-action]"
+  );
+```
+
+Ambil data:
+
+```js
+btn.dataset.id
+```
+
+Digunakan pada:
+
+```text
+Table Action
+Menu
+Dropdown
+Tabs
+```
+
+---
+
+# 12. Local Storage
+
+Menyimpan data permanen.
+
+---
+
+## Simpan
 
 ```js
 localStorage.setItem(
-    "theme",
-    "dark"
+  "theme",
+  "dark"
 );
 ```
 
-Ambil:
+---
+
+## Ambil
 
 ```js
 localStorage.getItem(
-    "theme"
+  "theme"
 );
 ```
 
-Hapus:
+---
+
+## Hapus
 
 ```js
 localStorage.removeItem(
-    "theme"
+  "theme"
 );
 ```
 
-Bersihkan:
+---
+
+## Bersihkan
 
 ```js
 localStorage.clear();
@@ -693,174 +711,257 @@ localStorage.clear();
 
 ---
 
-## Session Storage
+# 13. Session Storage
 
-Data hilang saat tab ditutup.
+Data hilang ketika tab ditutup.
 
 ```js
 sessionStorage.setItem();
+```
+
+```js
 sessionStorage.getItem();
 ```
 
 ---
 
-# 12. Timers
+# 14. Timer API
 
-## Jalankan Sekali
+---
+
+## setTimeout()
+
+Jalankan sekali.
 
 ```js
-setTimeout(
-    callback,
-    1000
-);
+setTimeout(() => {
+
+}, 1000);
 ```
 
 ---
 
-## Batalkan Timeout
+## clearTimeout()
+
+Batalkan timeout.
 
 ```js
-clearTimeout(id);
+clearTimeout(timeoutId);
 ```
 
 ---
 
-## Jalankan Berulang
+## setInterval()
+
+Jalankan berulang.
 
 ```js
-setInterval(
-    callback,
-    1000
-);
+setInterval(() => {
+
+}, 1000);
 ```
 
 ---
 
-## Hentikan Interval
+## clearInterval()
+
+Hentikan interval.
 
 ```js
-clearInterval(id);
+clearInterval(intervalId);
 ```
 
 ---
 
-# 13. URL API
+# 15. URL API
 
-Membaca query parameter.
+Mengelola query parameter.
+
+---
+
+## URLSearchParams
 
 ```js
 const params =
-    new URLSearchParams(
-        location.search
-    );
+  new URLSearchParams(
+    location.search
+  );
 ```
 
-Ambil parameter:
+---
+
+## get()
+
+Ambil parameter.
 
 ```js
 params.get("page");
 ```
 
-Set parameter:
+Contoh:
 
-```js
-params.set("page", 2);
+```text
+?page=2
 ```
 
 ---
 
-# 14. Clipboard API
+## set()
 
-Copy teks ke clipboard.
+Set parameter.
+
+```js
+params.set("page", 3);
+```
+
+---
+
+# 16. Clipboard API
+
+Copy ke clipboard.
 
 ```js
 navigator.clipboard.writeText(
-    "Hello"
+  "Hello World"
+);
+```
+
+Digunakan untuk:
+
+```text
+Copy Coupon
+Copy URL
+Copy API Key
+```
+
+---
+
+# 17. IntersectionObserver
+
+Mendeteksi elemen masuk viewport.
+
+```js
+const observer =
+  new IntersectionObserver(
+    callback
+  );
+```
+
+---
+
+## observe()
+
+Mulai mengamati.
+
+```js
+observer.observe(
+  target
 );
 ```
 
 ---
 
-# 15. IntersectionObserver
+## unobserve()
 
-Mendeteksi elemen terlihat di viewport.
+Berhenti mengamati satu elemen.
+
+```js
+observer.unobserve(
+  target
+);
+```
+
+---
+
+## disconnect()
+
+Hentikan semua observer.
+
+```js
+observer.disconnect();
+```
 
 Digunakan untuk:
 
-* Infinite Scroll
-* Lazy Load Image
-* Scroll Animation
-
-```js
-const observer =
-    new IntersectionObserver();
-```
-
-Method:
-
-```js
-observe()
-unobserve()
-disconnect()
+```text
+Infinite Scroll
+Lazy Load
+Scroll Animation
 ```
 
 ---
 
-# 16. History API
+# 18. History API
 
-Tambah URL baru:
+Mengubah URL tanpa reload.
+
+---
+
+## pushState()
+
+Tambah history baru.
 
 ```js
-history.pushState();
+history.pushState(
+  {},
+  "",
+  "?page=2"
+);
 ```
 
 ---
 
-Ganti URL sekarang:
+## replaceState()
+
+Ganti URL sekarang.
 
 ```js
-history.replaceState();
+history.replaceState(
+  {},
+  "",
+  "?page=2"
+);
 ```
 
 ---
 
-Navigasi browser:
+## back()
+
+Kembali.
 
 ```js
 history.back();
+```
 
+---
+
+## forward()
+
+Maju.
+
+```js
 history.forward();
 ```
 
 ---
 
-# 17. Async JavaScript
+# 19. Async DOM
 
-Digunakan untuk operasi yang membutuhkan waktu.
+Digunakan saat mengambil data dari server.
 
 ---
 
-## Promise
-
-Representasi proses yang belum selesai.
+## async
 
 ```js
-new Promise();
+async function loadUsers() {
+
+}
 ```
 
 ---
 
-## Async Function
-
-```js
-async function loadUsers() {}
-```
-
----
-
-## Await
-
-Menunggu proses selesai.
+## await
 
 ```js
 await fetch("/users");
@@ -868,23 +969,23 @@ await fetch("/users");
 
 ---
 
-## Try Catch
-
-Menangani error.
+## try/catch
 
 ```js
 try {
 
-} catch(error) {
+} catch (error) {
 
 }
 ```
 
 ---
 
-# 18. Fetch API
+# 20. Fetch API
 
 Request ke server.
+
+---
 
 ## GET
 
@@ -898,7 +999,7 @@ fetch("/users");
 
 ```js
 fetch("/users", {
-    method: "POST"
+  method: "POST"
 });
 ```
 
@@ -908,7 +1009,7 @@ fetch("/users", {
 
 ```js
 fetch("/users/1", {
-    method: "PUT"
+  method: "PUT"
 });
 ```
 
@@ -918,59 +1019,19 @@ fetch("/users/1", {
 
 ```js
 fetch("/users/1", {
-    method: "DELETE"
+  method: "DELETE"
 });
 ```
 
 ---
 
-## Response
+## response.json()
 
-JSON:
-
-```js
-response.json();
-```
-
-Text:
+Mengubah response menjadi object.
 
 ```js
-response.text();
-```
-
-File:
-
-```js
-response.blob();
-```
-
----
-
-# 19. Promise Utilities
-
-## Jalankan Bersamaan
-
-```js
-Promise.all([
-    users(),
-    posts()
-]);
-```
-
----
-
-## Ambil Yang Pertama Selesai
-
-```js
-Promise.race();
-```
-
----
-
-## Tunggu Semua Selesai
-
-```js
-Promise.allSettled();
+const data =
+  await response.json();
 ```
 
 ---
@@ -978,24 +1039,14 @@ Promise.allSettled();
 # Ringkasan Yang Paling Sering Dipakai
 
 ```text
-Array
-├─ push
-├─ splice
-├─ map
-├─ filter
-├─ find
-├─ some
-├─ every
-├─ sort
-
 Document
-├─ getElementById
 ├─ querySelector
 ├─ querySelectorAll
+├─ getElementById
 
 Element
 ├─ textContent
-├─ innerHTML
+├─ value
 ├─ classList
 ├─ dataset
 ├─ appendChild
@@ -1006,21 +1057,27 @@ Events
 ├─ addEventListener
 ├─ click
 ├─ input
+├─ change
 ├─ submit
+├─ keydown
 ├─ preventDefault
+├─ stopPropagation
 
-Browser API
+Storage
 ├─ localStorage
+├─ sessionStorage
+
+Browser APIs
 ├─ setTimeout
+├─ setInterval
 ├─ URLSearchParams
+├─ Clipboard API
 ├─ IntersectionObserver
 ├─ History API
 
-Async
+Network
 ├─ fetch
-├─ Promise
 ├─ async
 ├─ await
 ├─ try/catch
-├─ Promise.all
 ```
