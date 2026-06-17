@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link rel="stylesheet" href="../css/learn-alpine-js.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+    <div class="layout">
+        <!-- LEFT PANEL -->
+        <!-- LEFT PANEL -->
+        <!-- LEFT PANEL -->
+        <section class="card" x-data="teamManager" x-on:edit-member.window="updateMember($event.detail)"
+            x-effect="document.title = `${members.length} Members`">
+            <div class="section-header">
+                <h2>Team Manager <span class="count-badge" x-text="members.length"></span></h2>
+            </div>
+            <div class="search-wrap">
+                <i class="ti ti-search" aria-hidden="true"></i>
+                <input placeholder="Cari member..." x-model.debounce.300ms="search" />
+            </div>
+            <ul>
+                <template x-if="filteredMembers.length === 0">
+                    <li class="empty-state empty-state-no-border">
+                        <i class="ti ti-users empty-state-icon" aria-hidden="true"></i>
+                        Tidak ada member ditemukan
+                    </li>
+                </template>
+                <template x-for="member in filteredMembers" :key="member.id">
+                    <li :class="{ active: selectedId === member.id }" @click="selectMember(member)">
+                        <div class="member-item">
+                            <div class="member-avatar" x-text="initials(member.name)"></div>
+                            <span class="member-name" x-text="member.name"></span>
+                        </div>
+                        <button class="danger btn-delete" @click="removeMember(member.id, $event)" title="Hapus">
+                            <i class="ti ti-trash icon-small" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                </template>
+                <hr />
+                <form @submit.prevent="addMember()" class="member-form">
+                    <div class="field">
+                        <label>Tambah member baru</label>
+                        <input placeholder="Nama member..." x-model="newMember" @keyup.enter="addMember()" />
+                    </div>
+                    <button type="submit" class="primary btn-full">
+                        <i class="ti ti-plus" aria-hidden="true"></i>
+                        Tambah Member
+                    </button>
+                </form>
+        </section>
+        <!-- RIGHT PANEL -->
+        <!-- RIGHT PANEL -->
+        <!-- RIGHT PANEL -->
+        <section class="card" x-data="formMember" x-on:member-selected.window="selectedMember($event.detail)">
+            <div class="section-header">
+                <h2>Detail Member</h2>
+                <template x-if="member">
+                    <span class="badge" :class="member.active ? 'active' : 'inactive'"
+                        x-text="member.active ? 'Aktif' : 'Nonaktif'"></span>
+                </template>
+            </div>
+            <template x-if="member">
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                    <div class="field" x-id="['member-name']">
+                        <label :for="$id('member-name')">Nama</label>
+                        <input :id="$id('member-name')" x-model.lazy="member.name" placeholder="Nama member" />
+                    </div>
+                    <div class="row">
+                        <div class="field" x-id="['member-age']">
+                            <label :for="$id('member-age')">Usia</label>
+                            <input :id="$id('member-age')" type="number" x-model.number="member.age" min="1" max="99" />
+                        </div>
+                        <div class="field" x-id="['member-active']">
+                            <label :for="$id('member-active')">Status</label>
+                            <select :id="$id('member-active')" x-model.boolean="member.active">
+                                <option value="true">Aktif</option>
+                                <option value="false">Nonaktif</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div>
+                        <p class="preview-title">Preview</p>
+                        <div class="preview">
+                            <div class="preview-row">
+                                <span class="preview-label">Nama</span>
+                                <span class="preview-val" x-text="member.name"></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Usia</span>
+                                <span class="preview-val" x-text="member.age + ' tahun'"></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Status</span>
+                                <span class="badge" :class="member.active ? 'active' : 'inactive'"
+                                    x-text="member.active ? 'Aktif' : 'Nonaktif'"></span>
+                            </div>
+                            <div class="preview-row">
+                                <span class="preview-label">Tipe usia</span>
+                                <span class="preview-val preview-code" x-text="typeof member.age"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button @click="reset()" class="btn-flex-1"><i class="ti ti-refresh"
+                                aria-hidden="true"></i>Reset</button>
+                        <button class="primary btn-flex-2" @click="save()">
+                            <i class="ti ti-device-floppy" aria-hidden="true"></i>
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                    <template x-if="saved">
+                        <p class="save-success">
+                            <i class="ti ti-circle-check" aria-hidden="true"></i>
+                            Data berhasil disimpan
+                        </p>
+                    </template>
+                </div>
+            </template>
+            <div x-show="!member" class="muted">
+                <i class="ti ti-user-search empty-member-icon" aria-hidden="true"></i>
+                Pilih member dari panel kiri untuk melihat detail
+            </div>
+        </section>
+    </div>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('teamManager', () => ({
+                search: '',
+                newMember: '',
+                selectedId: null,
+                members: [
+                    { id: 1, name: 'John Doe', age: 23, active: false },
+                    { id: 2, name: 'Jane Smith', age: 24, active: true },
+                    { id: 3, name: 'Robert Fox', age: 25, active: false },
+                ],
+                init() {
+                    this.$watch('members', (members) => {
+                        document.title = `${members.length} Members`;
+                    });
+                },
+                get filteredMembers() {
+                    return this.members.filter((member) =>
+                        member.name
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase())
+                    );
+                },
+                addMember() {
+                    if (!this.newMember.trim()) return;
+                    const member = {
+                        id: Date.now(),
+                        name: this.newMember.trim(),
+                        age: 20,
+                        active: false,
+                    };
+                    this.members.push(member);
+                    this.newMember = '';
+                    this.selectMember(member);
+                },
+                selectMember(member) {
+                    this.selectedId = member.id;
+                    this.$dispatch(
+                        'member-selected',
+                        member
+                    );
+                },
+                removeMember(id, event) {
+                    event.stopPropagation();
+                    if (this.selectedId === id) {
+                        this.selectedId = null;
+                        this.$dispatch(
+                            'member-selected',
+                            null
+                        );
+                    }
+                    this.members = this.members.filter(
+                        (member) => member.id !== id
+                    );
+                },
+                updateMember(updatedMember) {
+                    const index = this.members.findIndex(
+                        member => member.id === updatedMember.id
+                    )
+                    if (index === -1) return
+                    this.members.splice(index, 1, {
+                        ...updatedMember
+                    })
+                },
+                initials(name) {
+                    return name
+                        .split(' ')
+                        .map((word) => word[0])
+                        .join('')
+                        .slice(0, 2)
+                        .toUpperCase();
+                },
+            }));
+            Alpine.data('formMember', () => ({
+                rawMember: null,
+                member: null,
+                saved: false,
+                showToast: false,
+                init() { },
+                save() {
+                    this.saved = true
+                    this.showToast = true
+                    setTimeout(() => this.showToast = false, 2500)
+                    this.$dispatch('edit-member', this.member)
+                },
+                selectedMember(e) {
+                    if (e) {
+                        this.member = { ...e }
+                        this.rawMember = { ...e }
+                        this.saved = false
+                    } else {
+                        this.member = null
+                    }
+                },
+                reset() {
+                    this.member = { ...this.rawMember }
+                    this.saved = false
+                }
+            }))
+        });
+    </script>
+</body>
+
+</html>

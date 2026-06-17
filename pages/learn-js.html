@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @layer base {
+        body {
+          @apply m-20 space-y-4 flex flex-col items-start;
+        }
+        button {
+          @apply border rounded-md px-2 cursor-pointer;
+        }
+        button.active {
+          @apply bg-black text-white border-none;
+        }
+        th,
+        td {
+          @apply border px-2 py-1;
+        }
+        input,
+        select {
+          @apply border rounded-md px-2 font-normal;
+        }
+      }
+
+      @layer utilities {
+        .status-user,
+        .action-field {
+          @apply text-center;
+        }
+        .delete-button {
+          @apply bg-red-900 border-none text-white;
+        }
+        .edit-button {
+          @apply bg-blue-900 border-none text-white;
+        }
+        .modal {
+          @apply hidden fixed bg-black/25 inset-0;
+        }
+        .modal.active {
+          @apply grid place-items-center;
+        }
+        .user-form {
+          @apply flex flex-col gap-2 border rounded-md p-2 w-fit bg-white;
+        }
+        .toast-container {
+          @apply fixed top-5 left-1/2;
+        }
+        .toast {
+          @apply bg-gray-800 text-white p-3 mb-2 rounded-md;
+        }
+      }
+    </style>
+</head>
+
+<body>
+  <button id="openCreate">Create</button>
+  <div class="w-full overflow-x-auto"></div>
+  <table class="w-full min-w-3xl">
+    <thead>
+      <tr>
+        <th>
+          Name
+          <button id="nameSort" name="name" class="border-none" data-value="">
+            <i class="fa-solid fa-sort"></i>
+          </button>
+        </th>
+        <th>
+          Email
+          <button id="emailSort" name="email" class="border-none" data-value="">
+            <i class="fa-solid fa-sort-down"></i>
+          </button>
+        </th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <th>
+          <input id="searchName" placeholder="Name" />
+        </th>
+        <th>
+          <input id="searchEmail" placeholder="Email" />
+        </th>
+        <th>
+          <select name="role" id="searchRole">
+            <option value="">All</option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </th>
+        <th>
+          <select name="role" id="searchStatus">
+            <option value="">All</option>
+            <option value="true">Active</option>
+            <option value="false">Non-Active</option>
+          </select>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="dataList"></tbody>
+  </table>
+  </div>
+  <div id="pagination"></div>
+
+  <div id="userModal" class="modal">
+    <form id="userForm" class="user-form" autocomplete="off">
+      <input name="name" type="text" placeholder="Name" required />
+      <input name="email" type="text" placeholder="Email" required />
+      <select name="role" required>
+        <option value="" disabled selected>Select</option>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+      <select name="status" required>
+        <option value="" disabled selected>Select</option>
+        <option value="true">Active</option>
+        <option value="false">Non-Active</option>
+      </select>
+      <div class="text-end space-x-2">
+        <button id="btnCloseModal">Close</button>
+        <button type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- -------------- -->
+  <!-- Render Data -->
+  <!-- -------------- -->
+  <script>
+    let users = Array.from({ length: 51 }, (_, i) => ({
+      id: i + 1,
+      name: `User ${i + 1}`,
+      email: `user${i + 1}@test.com`,
+      role: Math.random() < 0.5 ? "admin" : "user",
+      status: Math.random() < 0.5,
+    }));
+    let currentPage = 1;
+    let sortField;
+    let sortDirection;
+    const PAGE_SIZE = 10;
+
+    const dataUser = document.getElementById("dataList");
+    const searchName = document.getElementById("searchName");
+    const searchEmail = document.getElementById("searchEmail");
+    const searchRole = document.getElementById("searchRole");
+    const searchStatus = document.getElementById("searchStatus");
+
+    // <!-- -------------- -->
+    // <!-- Data -->
+    // <!-- -------------- -->
+    function getUsers() {
+      let result = [...users];
+
+      result = result.filter(
+        (user) =>
+          user.name.toLowerCase().includes(searchName.value.toLowerCase()) &&
+          user.email.toLowerCase().includes(searchEmail.value.toLowerCase()) &&
+          user.role.includes(searchRole.value) &&
+          user.status.toString().includes(searchStatus.value),
+      );
+
+      if (sortField && sortDirection) {
+        result.sort((a, b) => {
+          const compare = a[sortField].localeCompare(b[sortField]);
+
+          return sortDirection === "down" ? -compare : compare;
+        });
+      }
+
+      return result;
+    }
+
+    // <!-- -------------- -->
+    // <!-- Render -->
+    // <!-- -------------- -->
+    function render(data) {
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      const totalPage = Math.ceil(getUsers().length / PAGE_SIZE);
+
+      dataUser.innerHTML = data
+        .slice(start, end)
+        .map(
+          (user) =>
+            `<tr>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>${user.role}</td>
+                <td class="status-user"> ${user.status ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark"></i>'}</td>
+                <td class="action-field">
+                    <button class="edit-button" data-id="${user.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="delete-button" data-id="${user.id}"><i class="fa-solid fa-trash-can"></i></button>
+                </td>
+            </tr>`,
+        )
+        .join("");
+      renderPagination(totalPage);
+    }
+
+    // <!-- -------------- -->
+    // <!-- Make Toast -->
+    // <!-- -------------- -->
+    const toastContainer = document.getElementById("toastContainer");
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // <!-- -------------- -->
+    // <!-- Pagination -->
+    // <!-- -------------- -->
+    const pagination = document.getElementById("pagination");
+
+    function renderPagination(length) {
+      pagination.innerHTML = Array.from(
+        { length: length },
+        (_, i) => `
+                    <button class="${currentPage === i + 1 ? "active" : ""}"
+                        data-page="${i + 1}">
+                        ${i + 1}
+                    </button>
+                `,
+      ).join("");
+    }
+
+    pagination.addEventListener("click", (e) => {
+      if (e.target.dataset.page) {
+        currentPage = Number(e.target.dataset.page);
+        render(getUsers());
+      }
+    });
+
+    // <!-- -------------- -->
+    // <!-- Filter Action -->
+    // <!-- -------------- -->
+    [searchName, searchEmail, searchRole, searchStatus].forEach((input) => {
+      input.addEventListener("input", () => {
+        render(getUsers());
+      });
+    });
+
+    // <!-- -------------- -->
+    // <!-- Sorting Action-->
+    // <!-- -------------- -->
+    const nameSort = document.getElementById("nameSort");
+    const emailSort = document.getElementById("emailSort");
+    const states = {
+      "": {
+        next: "up",
+        icon: "fa-sort-up",
+      },
+      up: {
+        next: "down",
+        icon: "fa-sort-down",
+      },
+      down: {
+        next: "",
+        icon: "fa-sort",
+      },
+    };
+
+    [nameSort, emailSort].forEach((element) => {
+      element.addEventListener("click", () => {
+        [nameSort, emailSort].forEach((other) => {
+          if (other !== element) {
+            other.dataset.value = "";
+            other.innerHTML = `<i class="fa-solid fa-sort"></i>`;
+          }
+        });
+
+        const current = element.dataset.value;
+        const { next, icon } = states[current];
+        element.dataset.value = next;
+        element.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+        sortField = element.name;
+        sortDirection = element.dataset.value;
+
+        render(getUsers());
+      });
+    });
+
+    // <!-- -------------- -->
+    // <!-- Create and Edit User -->
+    // <!-- -------------- -->
+    let id;
+    let userIndex;
+    let mode = "create";
+    const openCreate = document.getElementById("openCreate");
+    const userModal = document.getElementById("userModal");
+    const userForm = document.getElementById("userForm");
+    const btnCloseModal = document.getElementById("btnCloseModal");
+
+    const nameInput = userForm.querySelector('[name="name"]');
+    const emailInput = userForm.querySelector('[name="email"]');
+    const roleInput = userForm.querySelector('[name="role"]');
+    const statusInput = userForm.querySelector('[name="status"]');
+
+    openCreate.addEventListener("click", () => {
+      mode = "create";
+      userModal.classList.add("active");
+    });
+
+    dataUser.addEventListener("click", (event) => {
+      const button = event.target.closest(".edit-button");
+      if (!button) return;
+      mode = "update";
+
+      userModal.classList.add("active");
+
+      id = Number(button.dataset.id);
+      userIndex = users.findIndex((user) => user.id === id);
+      const user = users.find((user) => user.id === id);
+
+      nameInput.value = user.name;
+      emailInput.value = user.email;
+      roleInput.value = user.role;
+      statusInput.value = user.status;
+    });
+
+    userForm.addEventListener("submit", (a) => {
+      a.preventDefault();
+
+      if (mode == "create") {
+        const formData = new FormData(userForm);
+        users.unshift({
+          id: Date.now(),
+          name: formData.get("name"),
+          email: formData.get("email"),
+          role: formData.get("role"),
+          status: formData.get("status") == "true",
+        });
+        showToast("Create Data Success");
+      } else {
+        users.splice(userIndex, 1, {
+          id: id,
+          name: nameInput.value,
+          email: emailInput.value,
+          role: roleInput.value,
+          status: statusInput.value,
+        });
+        showToast("Update Data Success");
+      }
+      userModal.classList.remove("active");
+      userForm.reset();
+      render(getUsers());
+    });
+
+    btnCloseModal.addEventListener("click", (a) => {
+      a.preventDefault();
+      userForm.reset();
+      userModal.classList.remove("active");
+    });
+
+    // <!-- -------------- -->
+    // <!-- Delete User -->
+    // <!-- -------------- -->
+    dataUser.addEventListener("click", (event) => {
+      const button = event.target.closest(".delete-button");
+      if (!button) return;
+      const id = Number(button.dataset.id);
+      const index = users.findIndex((user) => user.id === id);
+
+      if (index !== -1) {
+        users.splice(index, 1);
+        showToast("Delete Success");
+        render(getUsers());
+        return;
+      }
+      showToast("Delete Failed");
+    });
+
+    render(getUsers());
+  </script>
+</body>
+
+</html>

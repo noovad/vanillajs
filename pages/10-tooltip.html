@@ -1,9 +1,10 @@
 <!doctype html>
 <html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @layer base {
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @layer base {
         body {
           @apply h-screen grid place-items-center;
         }
@@ -21,26 +22,28 @@
         }
       }
     </style>
-  </head>
-  <body>
-    <p>
-      Hover
-      <span data-tooltip="Tooltip Example" class="target"> this text </span>
-    </p>
-    <div class="tooltip"></div>
-    <script>
-      const tooltip = document.querySelector(".tooltip");
-      document.querySelector(".target").addEventListener("mouseenter", (e) => {
-        tooltip.style.display = "block";
-        tooltip.textContent = e.target.dataset.tooltip;
-      });
-      document.querySelector(".target").addEventListener("mousemove", (e) => {
-        tooltip.style.left = e.clientX + 15 + "px";
-        tooltip.style.top = e.clientY + 15 + "px";
-      });
-      document.querySelector(".target").addEventListener("mouseleave", () => {
-        tooltip.style.display = "none";
-      });
-    </script>
-  </body>
+</head>
+
+<body>
+  <p>
+    Hover
+    <span data-tooltip="Tooltip Example" class="target"> this text </span>
+  </p>
+  <div class="tooltip"></div>
+  <script>
+    const tooltip = document.querySelector(".tooltip");
+    document.querySelector(".target").addEventListener("mouseenter", (e) => {
+      tooltip.style.display = "block";
+      tooltip.textContent = e.target.dataset.tooltip;
+    });
+    document.querySelector(".target").addEventListener("mousemove", (e) => {
+      tooltip.style.left = e.clientX + 15 + "px";
+      tooltip.style.top = e.clientY + 15 + "px";
+    });
+    document.querySelector(".target").addEventListener("mouseleave", () => {
+      tooltip.style.display = "none";
+    });
+  </script>
+</body>
+
 </html>
